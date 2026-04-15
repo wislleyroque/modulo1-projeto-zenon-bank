@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 
 public class TransactionIngestor {
 
@@ -18,24 +19,29 @@ public class TransactionIngestor {
 
             ini = System.nanoTime();
 
-            List<Transaction> transactions = lines.skip(startLine + 1).limit(numberOfLines).map(this::parseTransaction).toList();
+            List<Optional<Transaction>> transactions = lines.skip(startLine + 1).limit(numberOfLines).map(this::parseTransaction).toList();
 
             fim = System.nanoTime();
             System.out.println("Tempo de processamento de: " + transactions.size() + " linhas foi de: " + ((fim - ini) / 1000000) + "ms.");
-            return transactions;
+            return transactions.stream().filter(Optional::isPresent).map(Optional::get).toList();
         }
     }
 
-    private Transaction parseTransaction(String line) {
+    private Optional<Transaction> parseTransaction(String line) {
         String[] parts = line.split(",");
-        return new Transaction(
-                Integer.parseInt(parts[0]
-                ), TransactionType.valueOf(parts[1]),
-                new BigDecimal(parts[2]),
-                new TransactionCustomer(parts[3], new BigDecimal(parts[4]), new BigDecimal(parts[5])),
-                new TransactionCustomer(parts[6], new BigDecimal(parts[7]), new BigDecimal(parts[8])),
-                (parts[9].equals("1")),
-                (parts[9].equals("1"))
-        );
+        try {
+            Transaction transaction = new Transaction(
+                    Integer.parseInt(parts[0]
+                    ), TransactionType.valueOf(parts[1]),
+                    new BigDecimal(parts[2]),
+                    new TransactionCustomer(parts[3], new BigDecimal(parts[4]), new BigDecimal(parts[5])),
+                    new TransactionCustomer(parts[6], new BigDecimal(parts[7]), new BigDecimal(parts[8])),
+                    (parts[9].equals("1")),
+                    (parts[9].equals("1")));
+            return Optional.of(transaction);
+        } catch (Exception e) {
+            System.err.println("Error: " + line + " | " + e);
+        }
+        return Optional.empty();
     }
 }

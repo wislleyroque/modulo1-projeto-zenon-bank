@@ -8,6 +8,9 @@ public class TransactionCustomer {
     private BigDecimal newBalance;
 
     public TransactionCustomer(String name, BigDecimal oldBalance, BigDecimal newBalance) {
+        if (name.isEmpty()) throw new IllegalArgumentException("name should not be empty");
+        if (oldBalance.signum() < 0) throw new IllegalArgumentException("oldBalance should be positive: " + oldBalance);
+        if (newBalance.signum() < 0) throw new IllegalArgumentException("newBalance should be positive: " + newBalance);
         this.name = name;
         this.oldBalance = oldBalance;
         this.newBalance = newBalance;
@@ -18,6 +21,7 @@ public class TransactionCustomer {
     }
 
     public void setName(String name) {
+        if (name.isEmpty()) throw new IllegalArgumentException("name should not be empty");
         this.name = name;
     }
 
@@ -26,6 +30,7 @@ public class TransactionCustomer {
     }
 
     public void setOldBalance(BigDecimal oldBalance) {
+        if (oldBalance.signum() < 0) throw new IllegalArgumentException("oldBalance should be positive: " + oldBalance);
         this.oldBalance = oldBalance;
     }
 
@@ -34,6 +39,7 @@ public class TransactionCustomer {
     }
 
     public void setNewBalance(BigDecimal newBalance) {
+        if (newBalance.signum() < 0) throw new IllegalArgumentException("newBalance should be positive: " + newBalance);
         this.newBalance = newBalance;
     }
 
