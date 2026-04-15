@@ -1,7 +1,8 @@
+import br.com.zenon.fraud.Transaction;
 import br.com.zenon.fraud.TransactionIngestor;
 
 void main() throws IOException {
     TransactionIngestor transactionIngestor = new TransactionIngestor();
-    transactionIngestor.readTransactionsFromFile(0L,7000000L);
-
+    List<Transaction> transactions = transactionIngestor.readTransactionsFromFile(0L,1000);
+    transactions.stream().limit(10).forEach(System.out::println);
 }
