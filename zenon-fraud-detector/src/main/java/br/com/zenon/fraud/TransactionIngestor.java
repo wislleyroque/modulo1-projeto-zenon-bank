@@ -1,43 +1,41 @@
 package br.com.zenon.fraud;
 
-import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class TransactionIngestor {
 
-    public List<Transaction> readTransactionsFromFile(long startLine, long numberOfLines) throws IOException {
-        Path path = Paths.get("data/PS_20174392719_1491204439457_log.csv");
+    public List<Transaction> readTransactionsFromFile(long startLine, long numberOfLines, String fileName) throws IOException {
+        Path path = Paths.get(fileName);
 
         try (var lines = Files.lines(path)) {
 
             long ini, fim;
 
             ini = System.nanoTime();
-            List<String> result = lines.skip(startLine + 1).limit(numberOfLines).toList();
 
-            List<Transaction> transactions = new ArrayList<>();
-            result.stream()
-                    .map(line -> line.split(","))
-                    .map(parts -> new Transaction(
-                            Integer.parseInt(parts[0]
-                            ), TransactionType.valueOf(parts[1]),
-                            new BigDecimal(parts[2]),
-                            new TransactionCustomer(parts[3], new BigDecimal(parts[4]), new BigDecimal(parts[5])),
-                            new TransactionCustomer(parts[6], new BigDecimal(parts[7]), new BigDecimal(parts[8])),
-                            (!parts[9].equals("0")),
-                            (!parts[9].equals("0"))
-                    )).forEach(transactions::add);
+            List<Transaction> transactions = lines.skip(startLine + 1).limit(numberOfLines).map(this::parseTransaction).toList();
+
             fim = System.nanoTime();
-            System.out.println("Tempo de processamento de: " + result.size() + " linhas foi de: " + ((fim-ini)/1000000) + "ms.");
+            System.out.println("Tempo de processamento de: " + transactions.size() + " linhas foi de: " + ((fim - ini) / 1000000) + "ms.");
             return transactions;
         }
+    }
+
+    private Transaction parseTransaction(String line) {
+        String[] parts = line.split(",");
+        return new Transaction(
+                Integer.parseInt(parts[0]
+                ), TransactionType.valueOf(parts[1]),
+                new BigDecimal(parts[2]),
+                new TransactionCustomer(parts[3], new BigDecimal(parts[4]), new BigDecimal(parts[5])),
+                new TransactionCustomer(parts[6], new BigDecimal(parts[7]), new BigDecimal(parts[8])),
+                (parts[9].equals("1")),
+                (parts[9].equals("1"))
+        );
     }
 }
