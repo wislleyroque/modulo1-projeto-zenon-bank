@@ -1,6 +1,7 @@
 package br.com.zenon.fraud;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class TransactionCustomer {
     private String name;
@@ -47,8 +48,9 @@ public class TransactionCustomer {
     public String toString() {
         return "TransactionCustomer{" +
                 "name='" + name + '\'' +
-                ", oldBalance=" + oldBalance +
-                ", newBalance=" + newBalance +
+                ", oldBalance=" + oldBalance.toPlainString() +
+                ", newBalance=" + newBalance.toPlainString() +
                 '}';
     }
+
 }

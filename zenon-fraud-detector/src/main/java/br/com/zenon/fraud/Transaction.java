@@ -17,7 +17,7 @@ public record Transaction(int step, TransactionType type, BigDecimal amount, Tra
         return "Transaction{" +
                 "step=" + step +
                 ", type=" + type +
-                ", amount=" + amount +
+                ", amount=" + amount.toPlainString() +
                 ", origin=" + origin +
                 ", recipient=" + recipient +
                 ", isFraud=" + isFraud +

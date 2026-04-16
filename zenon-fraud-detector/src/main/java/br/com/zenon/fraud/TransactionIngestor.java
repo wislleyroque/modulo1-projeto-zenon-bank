@@ -37,7 +37,7 @@ public class TransactionIngestor {
                     new TransactionCustomer(parts[3], new BigDecimal(parts[4]), new BigDecimal(parts[5])),
                     new TransactionCustomer(parts[6], new BigDecimal(parts[7]), new BigDecimal(parts[8])),
                     (parts[9].equals("1")),
-                    (parts[9].equals("1")));
+                    (parts[10].equals("1")));
             return Optional.of(transaction);
         } catch (Exception e) {
             System.err.println("Error: " + line + " | " + e);
