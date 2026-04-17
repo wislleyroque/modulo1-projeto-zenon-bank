@@ -19,7 +19,13 @@ public class TransactionIngestor {
 
             ini = System.nanoTime();
 
-            List<Optional<Transaction>> transactions = lines.skip(startLine + 1).limit(numberOfLines).map(this::parseTransaction).toList();
+            List<Optional<Transaction>> transactions;
+            if (numberOfLines > 0) {
+                transactions = lines.skip(startLine).limit(numberOfLines).map(this::parseTransaction).toList();
+            } else {
+                transactions = lines.skip(1).map(this::parseTransaction).toList();
+            }
+
 
             fim = System.nanoTime();
             System.out.println("Tempo de processamento de: " + transactions.size() + " linhas foi de: " + ((fim - ini) / 1000000) + "ms.");
