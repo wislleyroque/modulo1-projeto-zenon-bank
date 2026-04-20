@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class TransactionIngestor {
 
@@ -21,7 +22,7 @@ public class TransactionIngestor {
 
             List<Optional<Transaction>> transactions;
             if (numberOfLines > 0) {
-                transactions = lines.skip(startLine).limit(numberOfLines).map(this::parseTransaction).toList();
+                transactions = lines.skip(startLine==0 ? 1 : startLine).limit(numberOfLines).map(this::parseTransaction).toList();
             } else {
                 transactions = lines.skip(1).map(this::parseTransaction).toList();
             }
@@ -29,7 +30,7 @@ public class TransactionIngestor {
 
             fim = System.nanoTime();
             System.out.println("Tempo de processamento de: " + transactions.size() + " linhas foi de: " + ((fim - ini) / 1000000) + "ms.");
-            return transactions.stream().filter(Optional::isPresent).map(Optional::get).toList();
+            return transactions.stream().filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList());
         }
     }
 

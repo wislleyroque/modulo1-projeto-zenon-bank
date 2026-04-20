@@ -1,6 +1,7 @@
 package br.com.zenon.fraud;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class TransactionListRepository implements TransactionRepository {
@@ -14,12 +15,17 @@ public class TransactionListRepository implements TransactionRepository {
 
 
     @Override
-    public Optional<Transaction> findTransactionByName(String name){
+    public Optional<Transaction> findByOriginName(String name){
         try {
             return Optional.of(transactions.stream().filter(transaction -> transaction.origin().getName().equals(name)).findFirst().orElseThrow(() -> new RuntimeException("Transação não encontrada para o cliente " + name)));
         } catch (Exception e) {
             System.err.println(e.getMessage());
             return Optional.empty();
         }
+    }
+
+    @Override
+    public void save(Transaction transaction) {
+        transactions.add(transaction);
     }
 }

@@ -1,0 +1,16 @@
+services:
+
+  db:
+    image: mysql
+    restart: always
+    container_name: mysql-fraud
+    environment:
+      MYSQL_ROOT_PASSWORD: senha123
+      MYSQL_DATABASE: zenon_fraud
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./script.sql:/docker-entrypoint-inidb.d/script.sql
+      - mysql_data:/var/lib/mysql
+volumes:
+  mysql_data:

@@ -3,5 +3,6 @@ package br.com.zenon.fraud;
 import java.util.Optional;
 
 public interface TransactionRepository {
-    Optional<Transaction> findTransactionByName(String name);
+    Optional<Transaction> findByOriginName(String name);
+    void save(Transaction transaction);
 }

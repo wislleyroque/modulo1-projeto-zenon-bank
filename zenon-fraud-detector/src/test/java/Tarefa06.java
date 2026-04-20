@@ -10,8 +10,8 @@ void main() throws IOException {
     long ini,fim;
     ini = System.currentTimeMillis();
 
-    repo.findTransactionByName("c123456").ifPresent(System.out::println);
-    repo.findTransactionByName("C190861775").ifPresent(System.out::println);
+    repo.findByOriginName("c123456").ifPresent(System.out::println);
+    repo.findByOriginName("C190861775").ifPresent(System.out::println);
     fim = System.currentTimeMillis();
     System.out.println("Tempo de busca: " + (System.currentTimeMillis() - ini) + "ms");
 }

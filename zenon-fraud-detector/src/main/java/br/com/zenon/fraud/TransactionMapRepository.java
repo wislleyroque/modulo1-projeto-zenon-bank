@@ -14,12 +14,19 @@ public class TransactionMapRepository implements TransactionRepository {
     }
 
     @Override
-    public Optional<Transaction> findTransactionByName(String name) {
+    public Optional<Transaction> findByOriginName(String name) {
         try {
             return transactionMap.get(name).stream().findFirst();
         } catch (Exception e) {
             System.err.println("Transação não encontrada para o cliente " + name);
             return Optional.empty();
         }
+    }
+
+    @Override
+    public void save(Transaction transaction) {
+        List<Transaction> tmp = transactionMap.get(transaction.origin().getName());
+        tmp.add(transaction);
+        transactionMap.put(transaction.origin().getName(), tmp);
     }
 }
