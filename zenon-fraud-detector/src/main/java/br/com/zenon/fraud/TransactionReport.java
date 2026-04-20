@@ -2,12 +2,16 @@ package br.com.zenon.fraud;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 
 public class TransactionReport {
 
-    public void generateTransactionReport() throws IOException {
+    public record ReportStatics(long totalLines, long totalFrauds, BigDecimal totalAmount) {
+
+    }
+    public ReportStatics generateTransactionReport() throws IOException {
         TransactionIngestor transactionIngestor = new TransactionIngestor();
 
         long totalLines = 0;
@@ -34,9 +38,7 @@ public class TransactionReport {
             offset += tmpTransactions.size(); // avança exatamente o que leu
         }
 
-        System.out.println("Total de linhas: " + totalLines);
-        System.out.println("Total de fraudes: " + totalFrauds);
-        System.out.println("Valor total transacionado " + totalAmount.toPlainString());
+        return new ReportStatics(totalLines, totalFrauds, totalAmount);
 
     }
 
